@@ -21,7 +21,7 @@
 1. **安装环境**: 确保你的浏览器已安装 [Tampermonkey](https://www.tampermonkey.net/) 插件。
 2. **获取脚本**:
    - 方式一：克隆本仓库并手动添加 `linuxdo.user.js` 到 Tampermonkey。
-   - 方式二（推荐）：待发布至 Greasy Fork 后直接点击安装[greasyfork](https://greasyfork.org/zh-CN/scripts/565692-linux-do-%E6%B5%AE%E7%AA%97%E9%98%85%E8%AF%BB)。
+   - 方式二（推荐）：至 Greasy Fork 后直接点击安装[greasyfork]( https://greasyfork.org/zh-CN/scripts/565692-linux-do-%E6%B5%AE%E7%AA%97%E9%98%85%E8%AF%BB )。
 3. **刷新页面**: 打开 [Linux.do](https://linux.do/) 即可自动生效。
 
 ## 💡 使用说明
