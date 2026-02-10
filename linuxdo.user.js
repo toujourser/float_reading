@@ -372,6 +372,36 @@
             margin-left: auto;
             font-weight: 500;
         }
+
+        /* 【新增】OP 标签 - 原帖作者标识 */
+        .ld-op-badge {
+            display: inline-flex;
+            align-items: center;
+            font-size: 0.7rem;
+            font-weight: 600;
+            line-height: 1;
+            padding: 2px 7px;
+            border-radius: 9999px;
+            white-space: nowrap;
+            flex-shrink: 0;
+            vertical-align: middle;
+            /* 浅色主题默认 */
+            background-color: #EFF6FF;
+            color: #1D4ED8;
+        }
+        /* 深色主题适配：Discourse 深色模式下 --scheme-type 为 dark */
+        html.dark-scheme .ld-op-badge,
+        html[data-color-scheme="dark"] .ld-op-badge {
+            background-color: #3B82F6;
+            color: #FFFFFF;
+        }
+        /* 备用深色检测：通过 secondary 变量色值判断 */
+        @media (prefers-color-scheme: dark) {
+            .ld-op-badge {
+                background-color: #3B82F6;
+                color: #FFFFFF;
+            }
+        }
         
         /* 【新增】用户已点赞状态 */
         .ld-like-btn.user-liked {
@@ -663,6 +693,7 @@
     // ==========================================
     let modalOverlay, modalContainer, modalContent, modalTitle, modalFooter;
     let currentTopicData = null; // Store current topic data for footer actions
+    let currentOpUsername = null; // 【OP标签】追踪当前帖子的原帖作者用户名
 
     // 【无限滚动状态】
     let infiniteScrollState = {
@@ -1985,6 +2016,11 @@
         const floorNumber = comment.post_number - 1;
         const floorHtml = floorNumber > 0 ? `<span class="ld-floor-number">#${floorNumber}</span>` : '';
 
+        // 【OP标签】判断当前评论是否为原帖作者
+        const opBadgeHtml = (currentOpUsername && comment.username === currentOpUsername)
+            ? '<span class="ld-op-badge">OP</span>'
+            : '';
+
         item.innerHTML = `
             <div class="ld-comment-inner">
                 <div class="ld-comment-header">
@@ -1992,6 +2028,7 @@
                         <img src="${fullAvatarUrl}" class="ld-avatar ${avatarClass}" alt="${comment.username}" loading="lazy">
                         <div class="ld-comment-meta">
                             <span class="ld-comment-username">${comment.username}</span>
+                            ${opBadgeHtml}
                             ${replyToHtml}
                             <span class="ld-comment-meta-sep">·</span>
                             <span class="ld-comment-time">${formatDate(comment.created_at)}</span>
@@ -2242,6 +2279,9 @@
         infiniteScrollState.hasMore = infiniteScrollState.loadedPostIds.size < infiniteScrollState.allPostIds.length;
 
         const { op, comments } = processPosts(allPosts);
+
+        // 【OP标签】记录原帖作者用户名，供 renderCommentNode 使用
+        currentOpUsername = op ? op.username : null;
 
         modalContent.innerHTML = '';
 
